@@ -2,19 +2,17 @@
 int main()
 {
     /*
-      Velocity and Jumping
-      
-      What is Velocity ?
-      -> Speed in a certain direction
-      -> Distance over time. (m/s)
+      What is gravity ?
+       -> It is a downward force.
+       -> Pulling objects toward the ground.
+       -> Impart an acceleration.
 
-      If positive the velocity is 10 (m/s)
-      If negative the velocity is -10 (m/s)
+       F=ma mass x accelaration
 
-      We are working in pixles i.e pixles/frame
-      
-      Eg: 10 (p/f) x 60 (f/s) = 600 (p/s)
-
+       What is acceleration ?
+        -> Velocity = Change in position
+        -> Acceleration = change in velocity
+        -> All objects accelerate at 9.8 m/s per second.
                                       512      
      0 ********************************* X 
        *
@@ -37,6 +35,9 @@ int main()
 
     int posY{Window_Height - height};
     int velocity{0}; //Pixles per frame
+    
+    // Acceleration due to gravity (pixles/frame)/frame
+    const int gravity {1};
 
     SetTargetFPS(60);
     
@@ -49,12 +50,23 @@ int main()
       BeginDrawing();
       ClearBackground(WHITE);
       
+      // Perform ground check
+      if (posY >= Window_Height - height)
+      {
+        // Rectangle on the ground
+        velocity = 0;
+      }
+      else
+      {
+        // Rectangle on the air
+         velocity += gravity;
+      }
       if(IsKeyPressed(KEY_SPACE))
       {
         velocity -=10; // It jumps to -10
       }
-
-      posY +=velocity; // The pos y changes as adding with velocity.
+      
+      posY +=velocity; // Update The pos y changes as adding with velocity.
 
       DrawRectangle(Window_Width/2, posY, width, height, BLUE);
       // Finish Drawing
