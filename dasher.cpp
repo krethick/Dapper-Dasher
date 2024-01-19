@@ -2,26 +2,7 @@
 int main()
 {
     /*
-      What is gravity ?
-       -> It is a downward force.
-       -> Pulling objects toward the ground.
-       -> Impart an acceleration.
-
-       F=ma mass x accelaration
-
-       What is acceleration ?
-        -> Velocity = Change in position
-        -> Acceleration = change in velocity
-        -> All objects accelerate at 9.8 m/s per second.
-                                      512      
-     0 ********************************* X 
-       *
-       *
-       * 
-       * 
-       * 
-       * 
-     Y * 380    
+      PREVENT AIR JUMPING MEANING JUMING IN THE AIR IF I PRESS SPACE CONTINOUSLY.
     */
     const int Window_Width{512};
     const int Window_Height{380};
@@ -38,9 +19,16 @@ int main()
     
     // Acceleration due to gravity (pixles/frame)/frame
     const int gravity {1};
+    
+    // Create a variable for in the air
+    bool isInAir {};
+    
+    // Jump Velocity
+    const int jumpVel{-22};
 
     SetTargetFPS(60);
     
+  
     // Keeping the WindowShouldClose as false.
     // Simple words negating the statement
     // We use the negation operator
@@ -55,15 +43,20 @@ int main()
       {
         // Rectangle on the ground
         velocity = 0;
+        // Create a variable for in the air
+        isInAir = false;
       }
       else
       {
         // Rectangle on the air
          velocity += gravity;
+         isInAir = true;
       }
-      if(IsKeyPressed(KEY_SPACE))
+
+      // Jump Check
+      if(IsKeyPressed(KEY_SPACE) && !isInAir) // !isInAir meaning not in Air.
       {
-        velocity -=10; // It jumps to -10
+        velocity +=jumpVel; // It jumps to jumpvel value
       }
       
       posY +=velocity; // Update The pos y changes as adding with velocity.
