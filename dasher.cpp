@@ -3,7 +3,14 @@ int main()
 {
     /*
       DRAWING FROM SPRITE SHEETS
-
+      
+      scarfyRec.width = scarfy.width/6; // 6 Because there are 6 images
+      scarfyRec.height = scarfy.height;
+      scarfyRec.x = 0;
+      scarfyRec.y = 0;
+      Vector2 scarfyPos; // For the position 
+      scarfyPos.x = Window_Width/2 - scarfyRec.width/2;
+      scarfyPos.y = Window_Height - scarfyRec.height;
 
     */
     const int Window_Width{512};
