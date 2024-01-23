@@ -2,43 +2,17 @@
 int main()
 {
     /*
-       DELTA TIME
-        Time between frames
-
-       WHY IT IS IMPORTANT
-         Frame time variations
-         Keep movement consistent
-        
-      SetTargetFPS(60)
-        * Sets the target FPS
-        * But it doesn't gurantee this value
-        * Processes strain the CPU.
-        * More strain = lower FPS
-        
-        Assume:
-        1 frame/sec
-        velocity = 1 meter/frame
-
-        2 frame/sec
-        velocity = 1 meters/frame
-        moves 10 meters ahead.
+      Animating Scarfy 
+       * We have a Sprite Sheet which contains multiple images of Scarfy
+       * Each animation is an animation frame.
+       * Cycle through the frame
        
-       velocity = 1 meter/sec independent of frame rate will be better
+      At Frame 1 x = w/6 Determines which frame.
+      At Frame 2 x = 2*w/6 
+      At Frame 3 x = 3*w/6 
+      
+      So the pattern is x = frame * w/6;
 
-      Delta time is the time since the last frame
-        * Delta Time = time [Since last frame]
-        * If FPS increases, Delta time decreases
-        * If FPS decreases, Delta time increases
-        * Muliply velocity by DeltaTime, then our velocity is scaled by the amount of time
-          between frames.
-
-        GetFrameTime(); -> This is the delta time between frames.
-
-        int gravity {1'000} = The ' is ignored by the compiler so that we can seperate the zeros and make this more redable to humans.
-
-        Multiplied by dT(Delta time) when:
-         Updating position with velocity
-         Updating velocity with acceleration
    */
 
     const int Window_Width{512};
@@ -68,12 +42,21 @@ int main()
       scarfy. => To access the inbuilt variables.
     */
 
+    // Animation Frame
+    int frame{}; // Braced initialisation as the value starts with 0.
+
     // Create a variable for in the air
     bool isInAir {};
 
     // Jump Velocity (pixles/second)
     const int jumpVel{-600};
-
+    
+    // Amount of time before we update the animation frame
+    const float updateTime{1.0/12.0};
+    
+    float runningTime{}; 
+    
+    
     SetTargetFPS(60);
     
     // Keeping the WindowShouldClose as false.
@@ -83,6 +66,8 @@ int main()
     {
       // Delta time 
       const float dT{GetFrameTime()};
+
+      
       // Start Drawing
       BeginDrawing();
       ClearBackground(WHITE);
@@ -110,6 +95,31 @@ int main()
       }
       
       scarfyPos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
+      
+      // Update Running time
+      runningTime += dT;
+      
+      if(runningTime>=updateTime)
+      {
+          runningTime = 0.0;
+          
+          // Update animation frame
+          scarfyRec.x = frame * scarfyRec.width;
+          frame++; // Next time the frame will be increasing by 1
+          
+          /* 
+          We need to reset the frame as soon as it gets larger than five, 
+          since we have only frames 0 through five on the sprite sheet so 
+          we can place an if check to see if frame is larger than 5, if yes
+          we'll simply set it back to Zero.
+        */
+      if(frame>5) 
+      {
+        frame = 0;
+      }
+    }
+     
+    
 
       DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
       // Finish Drawing
