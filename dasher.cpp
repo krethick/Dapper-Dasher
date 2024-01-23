@@ -2,18 +2,12 @@
 int main()
 {
     /*
-      Animating Scarfy 
-       * We have a Sprite Sheet which contains multiple images of Scarfy
-       * Each animation is an animation frame.
-       * Cycle through the frame
-       
-      At Frame 1 x = w/6 Determines which frame.
-      At Frame 2 x = 2*w/6 
-      At Frame 3 x = 3*w/6 
+      Create a Nebula Hazard
       
-      So the pattern is x = frame * w/6;
-
-   */
+      * We can actually start off the nebula off the scree, which
+        should be pretty easy because a textures position is its 
+        upper left corner.
+    */
 
     const int Window_Width{512};
     const int Window_Height{380};
@@ -41,6 +35,15 @@ int main()
     /*
       scarfy. => To access the inbuilt variables.
     */
+
+   // Create a Nebula
+   Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+   Rectangle nebulaRec;
+   nebulaRec.width = nebulaRec.width/8;
+   nebulaRec.height = nebulaRec.height/8;
+   nebulaRec.x = 0;
+   nebulaRec.y = 0;
+   Vector2 nebPos; //
 
     // Animation Frame
     int frame{}; // Braced initialisation as the value starts with 0.
@@ -125,12 +128,13 @@ int main()
       // Finish Drawing
       EndDrawing();
     }
-
+    
     UnloadTexture(scarfy); // Unload texture from GPU memory (VRAM)
     // Raylibs new function
     /*If we want to do things technically the CloseWindow()
       take care of shutting down the window properly before
       the program terminates.
     */
+   UnloadTexture(nebula);
     CloseWindow();
 }
