@@ -3,6 +3,11 @@ int main()
 {
     /*
      Multiple Nebula Hazard
+
+     On a small note nebUpdateTime{1.0/12.0};
+     => We would like to update Scarfy 12 times per second 
+     => So 1/12 of a second should pass in between each animation 
+        frame update.
     */
 
     const int Window_Width{512};
