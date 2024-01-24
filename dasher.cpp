@@ -2,17 +2,9 @@
 int main()
 {
     /*
-      Moving the Hazard
-      -> Put the mouse cursor on nebula Rectangle
-      -> After that right click and click peek definition
-      -> Inside the Ray lib Library showing us the definition of this rectangle type.
+     Animating Nebula
+       nebFrame => Frames for the Nebula
 
-      nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
-
-      0.0 => x
-      0.0 => y
-      nebula.width/8 => width
-      nebula.height/8 => height
     */
 
     const int Window_Width{512};
@@ -47,9 +39,15 @@ int main()
    Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
    Vector2 nebPos{Window_Width, Window_Height-nebulaRec.height}; // For the position 
    
-   // nebula X velocity (pixles/second)
-   int nebVel{-600}; // Nebula Velocity
+    // nebula X velocity (pixles/second)
+    int nebVel{-200}; // Nebula Velocity
 
+    // Nebula Frame
+    int nebFrame{}; 
+    // Nebula Update Time
+    const float nebUpdateTime{1.0/12.0};
+    // Nebula Running Time
+    float nebRunningTime{};
     // Animation Frame
     int frame{}; // Braced initialisation as the value starts with 0.
 
@@ -75,7 +73,6 @@ int main()
       // Delta time 
       const float dT{GetFrameTime()};
 
-      
       // Start Drawing
       BeginDrawing();
       ClearBackground(WHITE);
@@ -110,9 +107,9 @@ int main()
       
       if(!isInAir) // !isInAir = Not in Air i.e !True = false 
       {
-        // Update Running time
+      // Update Running time
       runningTime += dT;
-      if(runningTime>=updateTime&&isInAir==false)
+      if(runningTime>=updateTime) // We can even put this (isInAir==false) if we want.
       {
             runningTime = 0.0;
             
@@ -133,8 +130,32 @@ int main()
           }
       }
       
-     // Draw Nebula
-     DrawTextureRec(nebula,nebulaRec, nebPos, WHITE);
+      // Update Nebula Running time
+      nebRunningTime += dT;
+      if(nebRunningTime>=nebUpdateTime)
+      {
+        nebRunningTime = 0.0;
+        // Update animation frame
+        nebulaRec.x = nebFrame * nebulaRec.width;
+        nebFrame++;
+         
+         /* 
+            We need to reset the frame as soon as it gets larger than five, 
+            since we have only frames 0 through five on the sprite sheet so 
+            we can place an if check to see if frame is larger than 5, if yes
+            we'll simply set it back to Zero.
+          */
+
+        if(nebFrame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
+        {
+          nebFrame = 0;
+        }
+      }
+      
+
+      
+      // Draw Nebula
+      DrawTextureRec(nebula,nebulaRec, nebPos, WHITE);
     
       // Draw Scarfy
       DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
@@ -142,6 +163,7 @@ int main()
       // Finish/Stop Drawing
       EndDrawing();
     }
+
     
     UnloadTexture(scarfy); // Unload texture from GPU memory (VRAM)
     // Raylibs new function
