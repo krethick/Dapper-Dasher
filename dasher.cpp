@@ -2,9 +2,7 @@
 int main()
 {
     /*
-     Animating Nebula
-       nebFrame => Frames for the Nebula
-
+     Multiple Nebula Hazard
     */
 
     const int Window_Width{512};
@@ -38,16 +36,22 @@ int main()
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
    Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
    Vector2 nebPos{Window_Width, Window_Height-nebulaRec.height}; // For the position 
+
+   // Create a Second Nebula
+   Rectangle nebula2Rec{0.0, 0.0, nebula.width/8, nebula.height/8};
+   Vector2 neb2Pos{Window_Width + 300, Window_Height-nebulaRec.height}; // For the position , + 300 because to move away from the second nebula
    
+    // Nebula Animation Variable
+    int nebFrame{}; // Nebula Frame
+    const float nebUpdateTime{1.0/12.0}; // Nebula Update Time
+    float nebRunningTime{}; // Nebula Running Time
+    
+    int neb2Frame{}; // Nebula Frame 2
+    const float neb2UpdateTime{1.0/16.0}; // Nebula2 Update Time (16 because to cycle the animation faster)
+    float neb2RunningTime{}; // Nebula2 Running Time
     // nebula X velocity (pixles/second)
     int nebVel{-200}; // Nebula Velocity
 
-    // Nebula Frame
-    int nebFrame{}; 
-    // Nebula Update Time
-    const float nebUpdateTime{1.0/12.0};
-    // Nebula Running Time
-    float nebRunningTime{};
     // Animation Frame
     int frame{}; // Braced initialisation as the value starts with 0.
 
@@ -102,6 +106,9 @@ int main()
       // Update Nebula Position
       nebPos.x += nebVel * dT; // We use dT to make it frame rate independent
 
+      // Update Second Nebula Position
+      neb2Pos.x += nebVel * dT; // We use dT to make it frame rate independent
+
       // Update Scarfy Position
       scarfyPos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
       
@@ -151,11 +158,36 @@ int main()
           nebFrame = 0;
         }
       }
+
+       // Update Nebula 2 Running time
+      neb2RunningTime += dT;
+      if(neb2RunningTime>=nebUpdateTime)
+      {
+        neb2RunningTime = 0.0;
+        // Update animation frame
+        nebula2Rec.x = neb2Frame * nebula2Rec.width;
+        neb2Frame++;
+         
+         /* 
+            We need to reset the frame as soon as it gets larger than five, 
+            since we have only frames 0 through five on the sprite sheet so 
+            we can place an if check to see if frame is larger than 5, if yes
+            we'll simply set it back to Zero.
+          */
+
+        if(neb2Frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
+        {
+          neb2Frame = 0;
+        }
+      }
       
 
       
       // Draw Nebula
       DrawTextureRec(nebula,nebulaRec, nebPos, WHITE);
+
+      // Draw the Second Nebula
+      DrawTextureRec(nebula,nebula2Rec,neb2Pos, RED);
     
       // Draw Scarfy
       DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
