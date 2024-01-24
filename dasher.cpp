@@ -2,11 +2,17 @@
 int main()
 {
     /*
-      Create a Nebula Hazard
-      
-      * We can actually start off the nebula off the scree, which
-        should be pretty easy because a textures position is its 
-        upper left corner.
+      Moving the Hazard
+      -> Put the mouse cursor on nebula Rectangle
+      -> After that right click and click peek definition
+      -> Inside the Ray lib Library showing us the definition of this rectangle type.
+
+      nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
+
+      0.0 => x
+      0.0 => y
+      nebula.width/8 => width
+      nebula.height/8 => height
     */
 
     const int Window_Width{512};
@@ -38,12 +44,11 @@ int main()
 
    // Create a Nebula
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
-   Rectangle nebulaRec;
-   nebulaRec.width = nebulaRec.width/8;
-   nebulaRec.height = nebulaRec.height/8;
-   nebulaRec.x = 0;
-   nebulaRec.y = 0;
-   Vector2 nebPos; //
+   Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
+   Vector2 nebPos{Window_Width, Window_Height-nebulaRec.height}; // For the position 
+   
+   // nebula X velocity (pixles/second)
+   int nebVel{-600}; // Nebula Velocity
 
     // Animation Frame
     int frame{}; // Braced initialisation as the value starts with 0.
@@ -96,36 +101,45 @@ int main()
       {
         velocity +=jumpVel; // It jumps to jumpvel value
       }
-      
+
+      // Update Nebula Position
+      nebPos.x += nebVel * dT; // We use dT to make it frame rate independent
+
+      // Update Scarfy Position
       scarfyPos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
       
-      // Update Running time
+      if(!isInAir) // !isInAir = Not in Air i.e !True = false 
+      {
+        // Update Running time
       runningTime += dT;
-      
-      if(runningTime>=updateTime)
+      if(runningTime>=updateTime&&isInAir==false)
       {
-          runningTime = 0.0;
-          
-          // Update animation frame
-          scarfyRec.x = frame * scarfyRec.width;
-          frame++; // Next time the frame will be increasing by 1
-          
-          /* 
-          We need to reset the frame as soon as it gets larger than five, 
-          since we have only frames 0 through five on the sprite sheet so 
-          we can place an if check to see if frame is larger than 5, if yes
-          we'll simply set it back to Zero.
-        */
-      if(frame>5) 
-      {
-        frame = 0;
+            runningTime = 0.0;
+            
+            // Update animation frame
+            scarfyRec.x = frame * scarfyRec.width;
+            frame++; // Next time the frame will be increasing by 1
+            
+            /* 
+            We need to reset the frame as soon as it gets larger than five, 
+            since we have only frames 0 through five on the sprite sheet so 
+            we can place an if check to see if frame is larger than 5, if yes
+            we'll simply set it back to Zero.
+          */
+            if(frame>5) 
+            {
+              frame = 0;
+            }
+          }
       }
-    }
-     
+      
+     // Draw Nebula
+     DrawTextureRec(nebula,nebulaRec, nebPos, WHITE);
     
-
+      // Draw Scarfy
       DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
-      // Finish Drawing
+      
+      // Finish/Stop Drawing
       EndDrawing();
     }
     
