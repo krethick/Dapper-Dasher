@@ -1,5 +1,79 @@
 /*
-  
+   Arrays
+     It is the set of variables of the same time referred under one name
+     
+     Simple words in points:
+      -> A single variable
+      -> Multiple values
+      -> All of the same type
+    
+    For an eg:-
+     Skeleton : 0, Eye: 1, Mushroom: 2 and Goblin: 3
+
+    * Now we have these four different types of enemies, each one with
+      an integer assigned to it for identification.
+    
+    * Let us say in our video game, each enemy deals a different amount
+      of damage.
+    
+    * Now we could have a variable for the damage for each type of
+      enemy
+    
+
+    Let say we store these in doubles
+      => double skeletonDamage{20.0};
+         double eyeDamage{35.5};
+         double mushroomDamage{15.0};
+         double goblinDamage{5.75};
+      But this is one way of doing it
+
+    Second way is we could have a single variable called
+    Damage, which can store the damage value for each enemy type.
+    
+    =>We can do this with an array.
+    [20.0][35.5][15.0][5.75] Damage
+    
+    Example of how an array which is un-initialised
+                          
+                         0 1 2 3
+    double damage[4]; => [][][][]
+       * Creates an array of size 4
+       * Each of the values that we store in the array are called elements
+       * And for each element an index position is assigned.
+    
+    How to initialise the array ?
+      => damage[0] = 20.0
+         We do so by accessing one of the elements using square brackets,
+         along with an integer value.
+
+         damage[0] = 20.0
+          => [0] is the array index operator
+          
+          => 0  (The index determines which array element to access)
+             []  
+          
+          => = Then we can use the assignment operator to store a value in 
+               that element at the assigned index.
+          
+          => So to assign a value to the array element at index ONE, we would
+             use the array index operator with a ONE inside and assign a 
+             value using the assignment operator.
+              Eg: damage[1] = 35.5;
+          
+          Overall Example:
+            double damage[4];
+
+            damage[0] = 20.0;          Output
+            damage[1] = 35.5;       0    1     2     3    
+            damage[2] = 15.0;    [20.0][35.5][15.0][5.75]
+            damage[3] = 5.75;
+
+      Note: Now we keep in mind that our array has only four elements,
+            so we can't try to access the fifth element.
+        Result would be : Out of bound exception
+
+        So damage[4] = 9.0; => So assigning a value out of bounds of that array
+                               is a bad idea and could result in undefined behavior.
 */    
 
 #include "raylib.h"
