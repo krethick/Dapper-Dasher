@@ -1,48 +1,8 @@
 /*
-     Custom Data Type
-      * Hold Animation Data
-      * Reuse Code
-      * Eliminate copied Code
-    
-    -> One of the ways to create a custom data type is by making use of
-       something called a struct.
+   More on Custom Data Types  
+    -> We are going to create AnimData variables for nebula hazards.
 
-       struct contains its own variables.
-       We need to use the struct keyword to declare.
-
-       Eg:
-        struct MyCustomType
-        {
-          float x;
-          float y;
-        };
-       
-       struct MyCustomType : Because our custom data type is built up of other data types
-                             we call all these compound data types.
-
-        When does it comes in Handy ?
-         => Repeated Variables
-              * Animation Frame Rectangle
-              * Screen position
-              * Anim frame
-              * Update time
-              * Running time
-        
-        This below struct can hold variables inside of it for each of these
-        properties.
-        Eg:
-        struct AnimData
-        {
-          Rectangle rec;
-          Vector2 pos;
-          int frame;
-          float updateTime;
-          float runningTime;
-        };
-
-        Whenever we give a struct its own variables, we refer to those variables as members
-        or member variables.
-    */
+*/
 
 #include "raylib.h"
 
@@ -98,6 +58,25 @@ int main()
 
    // Create a Nebula
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+
+   // AnimData for Nebula 
+   AnimData nebData{ 
+    {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec -> Stored together in one
+    {Window_Width, Window_Height-nebula.height/8}, // Vector2 pos  -> Stored togetherin one
+    0,  // int frame
+    1.0/12.0, // float updateTime
+    0 // float runningTime
+  };
+    
+    // AnimData for Nebula 2
+    AnimData neb2Data{ 
+    {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec
+    {Window_Width + 300, Window_Height-nebula.height/8}, // Vector2 pos
+    0,  // int frame
+    1.0/16.0, // float updateTime
+    0.0 // float runningTime
+  };
+
    Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
    Vector2 nebPos{Window_Width, Window_Height-nebulaRec.height}; // For the position 
 
