@@ -1,12 +1,8 @@
 /*
-   More on Custom Data Types  
-    -> We are going to create AnimData variables for nebula hazards.
-    -> Replace the old variables.
-
-*/
+  
+*/    
 
 #include "raylib.h"
-
 struct AnimData // Animation Data
 {
   Rectangle rec;
@@ -18,39 +14,17 @@ struct AnimData // Animation Data
 
 int main()
 {
-    const int Window_Width{512};
-    const int Window_Height{380};
-    
-    // Initialise the window and use this before while loop
-    InitWindow(Window_Width,Window_Height,"Dapper Dasher");
+    int windowDimensions[2];
+    windowDimensions[0] = 512; // Width
+    windowDimensions[1] = 380; // Height
 
-    
-    
+    // Initialise the window and use this before while loop
+    InitWindow(windowDimensions[0],windowDimensions[1],"Dapper Dasher");
     // Acceleration due to gravity (pixles/second)/second
     const int gravity {1'000}; 
 
-    // Compound datatype which has it's own variables, we use the dot . operator to access compund datatype
-    // LoadTexture Takes the file path as an input parameter.
-    // Scarfy Variables
-    Texture2D scarfy = LoadTexture("textures/scarfy.png");
-    AnimData scarfyData; // Structure Data Type, we gave AnimData its own member variables.
-    scarfyData.rec.width = scarfy.width/6;  // rec is from the struct AnimData
-    scarfyData.rec.height = scarfy.height;
-    scarfyData.rec.x = 0;
-    scarfyData.rec.y = 0; 
-    scarfyData.pos.x = Window_Width/2 - scarfyData.rec.width/2;
-    scarfyData.pos.y = Window_Height - scarfyData.rec.height;
-    scarfyData.frame = 0;
-    scarfyData.updateTime = 1.0/12.0;
-    scarfyData.runningTime = 0.0;
-    
-     // Create a variable for in the air
-    bool isInAir {};
-
-    // Jump Velocity (pixles/second)
-    const int jumpVel{-600};
-    
     int velocity{0}; //Pixles per frame
+    
     /*
       scarfy. => To access the inbuilt variables.
     */
@@ -61,7 +35,7 @@ int main()
    // AnimData for Nebula 
    AnimData nebData{ 
     {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec -> Stored together in one
-    {Window_Width, Window_Height-nebula.height/8}, // Vector2 pos  -> Stored togetherin one
+    {windowDimensions[0], windowDimensions[1]-nebula.height/8}, // Vector2 pos  -> Stored togetherin one
     0,  // int frame
     1.0/12.0, // float updateTime
     0 // float runningTime
@@ -70,14 +44,36 @@ int main()
     // AnimData for Nebula 2
     AnimData neb2Data{ 
     {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec
-    {Window_Width + 300, Window_Height-nebula.height/8}, // Vector2 pos
+    {windowDimensions[0] + 300, windowDimensions[1]-nebula.height/8}, // Vector2 pos
     0,  // int frame
     1.0/16.0, // float updateTime
     0.0 // float runningTime
   };
 
    int nebVel{-200}; // Nebula Velocity
-   SetTargetFPS(60);
+   
+    // Compound datatype which has it's own variables, we use the dot . operator to access compund datatype
+    // LoadTexture Takes the file path as an input parameter.
+    // Scarfy Variables
+    Texture2D scarfy = LoadTexture("textures/scarfy.png");
+    AnimData scarfyData; // Structure Data Type, we gave AnimData its own member variables.
+    scarfyData.rec.width = scarfy.width/6;  // rec is from the struct AnimData
+    scarfyData.rec.height = scarfy.height;
+    scarfyData.rec.x = 0;
+    scarfyData.rec.y = 0; 
+    scarfyData.pos.x = windowDimensions[0]/2 - scarfyData.rec.width/2;
+    scarfyData.pos.y = windowDimensions[1] - scarfyData.rec.height;
+    scarfyData.frame = 0;
+    scarfyData.updateTime = 1.0/12.0;
+    scarfyData.runningTime = 0.0;
+    
+    // Create a variable for in the air
+    bool isInAir {};
+    
+     // Jump Velocity (pixles/second)
+    const int jumpVel{-600};
+
+    SetTargetFPS(60);
     
     // Keeping the WindowShouldClose as false.
     // Simple words negating the statement
@@ -92,7 +88,7 @@ int main()
       ClearBackground(WHITE);
       
       // Perform ground check
-      if (scarfyData.pos.y >= Window_Height - scarfyData.rec.height)
+      if (scarfyData.pos.y >= windowDimensions[1] - scarfyData.rec.height)
       {
         // Scarfy on the ground
         velocity = 0;
@@ -131,7 +127,7 @@ int main()
             scarfyData.runningTime = 0.0;
             
             // Update animation frame
-            scarfyData.pos.x = scarfyData.frame * scarfy.width;
+            scarfyData.rec.x = scarfyData.frame * scarfyData.rec.width;
             scarfyData.frame++; // Next time the frame will be increasing by 1
             
             /* 
@@ -180,7 +176,7 @@ int main()
         neb2Data.runningTime = 0.0;
         
         // Update animation frame
-        neb2Data.pos.x = neb2Data.frame * neb2Data.rec.width;
+        neb2Data.rec.x = neb2Data.frame * neb2Data.rec.width;
         neb2Data.frame++;
         
         /* 
@@ -196,13 +192,10 @@ int main()
         }
       }
       
-
-      
       // Draw Nebula
       DrawTextureRec(nebula,nebData.rec, nebData.pos, WHITE);
 
       // Draw the Second Nebula
-      
       DrawTextureRec(nebula,neb2Data.rec,neb2Data.pos, RED);
     
       // Draw Scarfy
@@ -220,5 +213,5 @@ int main()
       the program terminates.
     */
    UnloadTexture(nebula);
-    CloseWindow();
+   CloseWindow();
 }
