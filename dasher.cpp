@@ -1,15 +1,62 @@
-#include "raylib.h"
-int main()
-{
-    /*
-     Multiple Nebula Hazard
+/*
+     Custom Data Type
+      * Hold Animation Data
+      * Reuse Code
+      * Eliminate copied Code
+    
+    -> One of the ways to create a custom data type is by making use of
+       something called a struct.
 
-     On a small note nebUpdateTime{1.0/12.0};
-     => We would like to update Scarfy 12 times per second 
-     => So 1/12 of a second should pass in between each animation 
-        frame update.
+       struct contains its own variables.
+       We need to use the struct keyword to declare.
+
+       Eg:
+        struct MyCustomType
+        {
+          float x;
+          float y;
+        };
+       
+       struct MyCustomType : Because our custom data type is built up of other data types
+                             we call all these compound data types.
+
+        When does it comes in Handy ?
+         => Repeated Variables
+              * Animation Frame Rectangle
+              * Screen position
+              * Anim frame
+              * Update time
+              * Running time
+        
+        This below struct can hold variables inside of it for each of these
+        properties.
+        Eg:
+        struct AnimData
+        {
+          Rectangle rec;
+          Vector2 pos;
+          int frame;
+          float updateTime;
+          float runningTime;
+        };
+
+        Whenever we give a struct its own variables, we refer to those variables as members
+        or member variables.
     */
 
+#include "raylib.h"
+
+struct AnimData // Animation Data
+{
+  Rectangle rec;
+  Vector2 pos;
+  int frame;
+  float updateTime;
+  float runningTime;
+};
+
+int main()
+{
     const int Window_Width{512};
     const int Window_Height{380};
     
@@ -23,7 +70,19 @@ int main()
 
     // Compound datatype which has it's own variables, we use the dot . operator to access compund datatype
     // LoadTexture Takes the file path as an input parameter.
+    // Scarfy Variables
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
+    AnimData scarfyData; // Structure Data Type, we gave AnimData its own member variables.
+    scarfyData.rec.width = scarfy.width/6;  // rec is from the struct AnimData
+    scarfyData.rec.height = scarfy.height;
+    scarfyData.rec.x = 0;
+    scarfyData.rec.y = 0; 
+    scarfyData.pos.x = Window_Width/2 - scarfyData.rec.width/2;
+    scarfyData.pos.y = Window_Height - scarfyData.rec.height;
+    scarfyData.frame = 0;
+    scarfyData.updateTime = 1.0/12.0;
+    scarfyData.runningTime = 0.0;
+
     Rectangle scarfyRec; // Texture rec needs an rectangle describing which section of the sprite sheet to draw.
     scarfyRec.width = scarfy.width/6; // 6 Because there are 6 images
     scarfyRec.height = scarfy.height;
@@ -166,7 +225,7 @@ int main()
 
        // Update Nebula 2 Running time
       neb2RunningTime += dT;
-      if(neb2RunningTime>=nebUpdateTime)
+      if(neb2RunningTime>=neb2UpdateTime)
       {
         neb2RunningTime = 0.0;
         // Update animation frame
