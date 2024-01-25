@@ -1,6 +1,7 @@
 /*
    More on Custom Data Types  
     -> We are going to create AnimData variables for nebula hazards.
+    -> Replace the old variables.
 
 */
 
@@ -23,7 +24,7 @@ int main()
     // Initialise the window and use this before while loop
     InitWindow(Window_Width,Window_Height,"Dapper Dasher");
 
-    int velocity{0}; //Pixles per frame
+    
     
     // Acceleration due to gravity (pixles/second)/second
     const int gravity {1'000}; 
@@ -42,16 +43,14 @@ int main()
     scarfyData.frame = 0;
     scarfyData.updateTime = 1.0/12.0;
     scarfyData.runningTime = 0.0;
-
-    Rectangle scarfyRec; // Texture rec needs an rectangle describing which section of the sprite sheet to draw.
-    scarfyRec.width = scarfy.width/6; // 6 Because there are 6 images
-    scarfyRec.height = scarfy.height;
-    scarfyRec.x = 0;
-    scarfyRec.y = 0;
-    Vector2 scarfyPos; // For the position 
-    scarfyPos.x = Window_Width/2 - scarfyRec.width/2;
-    scarfyPos.y = Window_Height - scarfyRec.height;
     
+     // Create a variable for in the air
+    bool isInAir {};
+
+    // Jump Velocity (pixles/second)
+    const int jumpVel{-600};
+    
+    int velocity{0}; //Pixles per frame
     /*
       scarfy. => To access the inbuilt variables.
     */
@@ -77,40 +76,8 @@ int main()
     0.0 // float runningTime
   };
 
-   Rectangle nebulaRec{0.0, 0.0, nebula.width/8, nebula.height/8};
-   Vector2 nebPos{Window_Width, Window_Height-nebulaRec.height}; // For the position 
-
-   // Create a Second Nebula
-   Rectangle nebula2Rec{0.0, 0.0, nebula.width/8, nebula.height/8};
-   Vector2 neb2Pos{Window_Width + 300, Window_Height-nebulaRec.height}; // For the position , + 300 because to move away from the second nebula
-   
-    // Nebula Animation Variable
-    int nebFrame{}; // Nebula Frame
-    const float nebUpdateTime{1.0/12.0}; // Nebula Update Time
-    float nebRunningTime{}; // Nebula Running Time
-    
-    int neb2Frame{}; // Nebula Frame 2
-    const float neb2UpdateTime{1.0/16.0}; // Nebula2 Update Time (16 because to cycle the animation faster)
-    float neb2RunningTime{}; // Nebula2 Running Time
-    // nebula X velocity (pixles/second)
-    int nebVel{-200}; // Nebula Velocity
-
-    // Animation Frame
-    int frame{}; // Braced initialisation as the value starts with 0.
-
-    // Create a variable for in the air
-    bool isInAir {};
-
-    // Jump Velocity (pixles/second)
-    const int jumpVel{-600};
-    
-    // Amount of time before we update the animation frame
-    const float updateTime{1.0/12.0};
-    
-    float runningTime{}; 
-    
-    
-    SetTargetFPS(60);
+   int nebVel{-200}; // Nebula Velocity
+   SetTargetFPS(60);
     
     // Keeping the WindowShouldClose as false.
     // Simple words negating the statement
@@ -125,7 +92,7 @@ int main()
       ClearBackground(WHITE);
       
       // Perform ground check
-      if (scarfyPos.y >= Window_Height - scarfyRec.height)
+      if (scarfyData.pos.y >= Window_Height - scarfyData.rec.height)
       {
         // Scarfy on the ground
         velocity = 0;
@@ -147,25 +114,25 @@ int main()
       }
 
       // Update Nebula Position
-      nebPos.x += nebVel * dT; // We use dT to make it frame rate independent
+      nebData.pos.x += nebVel * dT; // We use dT to make it frame rate independent
 
       // Update Second Nebula Position
-      neb2Pos.x += nebVel * dT; // We use dT to make it frame rate independent
+      neb2Data.pos.x += nebVel * dT; // We use dT to make it frame rate independent
 
       // Update Scarfy Position
-      scarfyPos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
+      scarfyData.pos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
       
       if(!isInAir) // !isInAir = Not in Air i.e !True = false 
       {
       // Update Running time
-      runningTime += dT;
-      if(runningTime>=updateTime) // We can even put this (isInAir==false) if we want.
+      scarfyData.runningTime += dT;
+      if(scarfyData.runningTime>=scarfyData.updateTime) // We can even put this (isInAir==false) if we want.
       {
-            runningTime = 0.0;
+            scarfyData.runningTime = 0.0;
             
             // Update animation frame
-            scarfyRec.x = frame * scarfyRec.width;
-            frame++; // Next time the frame will be increasing by 1
+            scarfyData.pos.x = scarfyData.frame * scarfy.width;
+            scarfyData.frame++; // Next time the frame will be increasing by 1
             
             /* 
             We need to reset the frame as soon as it gets larger than five, 
@@ -173,21 +140,24 @@ int main()
             we can place an if check to see if frame is larger than 5, if yes
             we'll simply set it back to Zero.
           */
-            if(frame>5) 
+            if(scarfyData.frame>5) 
             {
-              frame = 0;
+              scarfyData.frame = 0;
             }
           }
       }
       
       // Update Nebula Running time
-      nebRunningTime += dT;
-      if(nebRunningTime>=nebUpdateTime)
+      
+      nebData.runningTime += dT;
+      if(nebData.runningTime>=nebData.updateTime)
       {
-        nebRunningTime = 0.0;
-        // Update animation frame
-        nebulaRec.x = nebFrame * nebulaRec.width;
-        nebFrame++;
+        nebData.runningTime = 0.0;
+        
+        // Update animation frame 
+        nebData.rec.x = nebData.frame * nebData.rec.width;
+        nebData.frame++;
+        
          
          /* 
             We need to reset the frame as soon as it gets larger than five, 
@@ -196,44 +166,47 @@ int main()
             we'll simply set it back to Zero.
           */
 
-        if(nebFrame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
+        if(nebData.frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
         {
-          nebFrame = 0;
+          nebData.frame = 0;
         }
       }
 
        // Update Nebula 2 Running time
-      neb2RunningTime += dT;
-      if(neb2RunningTime>=neb2UpdateTime)
+      
+      neb2Data.runningTime += dT;
+      if(neb2Data.runningTime>=neb2Data.updateTime)
       {
-        neb2RunningTime = 0.0;
+        neb2Data.runningTime = 0.0;
+        
         // Update animation frame
-        nebula2Rec.x = neb2Frame * nebula2Rec.width;
-        neb2Frame++;
-         
-         /* 
+        neb2Data.pos.x = neb2Data.frame * neb2Data.rec.width;
+        neb2Data.frame++;
+        
+        /* 
             We need to reset the frame as soon as it gets larger than five, 
             since we have only frames 0 through five on the sprite sheet so 
             we can place an if check to see if frame is larger than 5, if yes
             we'll simply set it back to Zero.
           */
 
-        if(neb2Frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
+        if(neb2Data.frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
         {
-          neb2Frame = 0;
+          neb2Data.frame = 0;
         }
       }
       
 
       
       // Draw Nebula
-      DrawTextureRec(nebula,nebulaRec, nebPos, WHITE);
+      DrawTextureRec(nebula,nebData.rec, nebData.pos, WHITE);
 
       // Draw the Second Nebula
-      DrawTextureRec(nebula,nebula2Rec,neb2Pos, RED);
+      
+      DrawTextureRec(nebula,neb2Data.rec,neb2Data.pos, RED);
     
       // Draw Scarfy
-      DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
+      DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
       
       // Finish/Stop Drawing
       EndDrawing();
