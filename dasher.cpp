@@ -1,23 +1,16 @@
 /*
-  Looping Through the Hazards
-  
-  Eg:
+  Lots of Nebulae
+    
+   We can do this way manually
 
-  for (int i=0; i<3; i++)
-   {
-      nebulae[i].rec.x = 0.0;
-      nebulae[i].rec.y = 0.0;
-      nebulae[i].rec.width = nebula.width/8;
-      nebulae[i].rec.height = nebula.height/8;
-      nebulae[i].pos.y = windowDimensions[1] - nebula.height/8;
-      nebulae[i].frame = 0;
-      nebulae[i].runningTime = 0.0;
-      nebulae[i].updateTime = 1.0/16.0;
-   } 
-   
    nebulae[0].pos.x = windowDimensions[0];
    nebulae[1].pos.x = windowDimensions[0] + 300;
    nebulae[2].pos.x = windowDimensions[0] + 600;
+   nebulae[3].pos.x = windowDimensions[0] + 900;
+   nebulae[4].pos.x = windowDimensions[0] + 1200;
+   nebulae[5].pos.x = windowDimensions[0] + 1500;
+
+nebulae[i].pos.x = windowDimensions[0] + i * 300; // This a another way in the loop
 
 */    
 
@@ -50,14 +43,15 @@ int main()
 
    // Create a Nebula
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
-
+   
+   const int sizeOfNebulae{10}; // Create the size of nebulaes
    // Creates an array size two that stores two anim data elements.
    // We use the braced initialisation.
    // Over here nebData will have index 0 and copies into the first element of the array.
    // and neb2Data will have index 1 and copies that into the second element.
-   AnimData nebulae[3]{};
+   AnimData nebulae[sizeOfNebulae]{};
 
-   for (int i=0; i<3; i++)
+   for (int i=0; i<sizeOfNebulae; i++)
    {
       nebulae[i].rec.x = 0.0;
       nebulae[i].rec.y = 0.0;
@@ -67,11 +61,8 @@ int main()
       nebulae[i].frame = 0;
       nebulae[i].runningTime = 0.0;
       nebulae[i].updateTime = 1.0/16.0;
+      nebulae[i].pos.x = windowDimensions[0] + i * 300; // This a another way in the loop
    } 
-   
-   nebulae[0].pos.x = windowDimensions[0];
-   nebulae[1].pos.x = windowDimensions[0] + 300;
-   nebulae[2].pos.x = windowDimensions[0] + 600;
 
   int nebVel{-200}; // Nebula Velocity
    
@@ -132,13 +123,13 @@ int main()
         velocity +=jumpVel; // It jumps to jumpvel value
       }
      
-     
-      // Update Nebula Position
-      nebulae[0].pos.x += nebVel * dT; // We use dT to make it frame rate independent
-
-      // Update Second Nebula Position
-      nebulae[1].pos.x += nebVel * dT; // We use dT to make it frame rate independent
-
+      
+      for (int i=0; i<sizeOfNebulae; i++)
+      {
+        // Update Position of each nebula
+       nebulae[i].pos.x += nebVel * dT; // We use dT to make it frame rate independent
+      }
+      
       // Update Scarfy Position
       scarfyData.pos.y +=velocity * dT; // Update The pos y changes as adding with velocity.
       
@@ -167,61 +158,37 @@ int main()
           }
       }
       
+      // Create a for loop for creating Nebulaes
+
+      for (int i=0; i<sizeOfNebulae; i++)
+      {
+          // Update Nebula Running time
+         nebulae[i].runningTime += dT;
+         if(nebulae[i].runningTime>=nebulae[i].updateTime)
+         {
+            nebulae[i].runningTime = 0.0;
+            // Update animation frame 
+            nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
+            nebulae[i].frame++;
+            /* 
+             We need to reset the frame as soon as it gets larger than five, 
+             since we have only frames 0 through five on the sprite sheet so 
+             we can place an if check to see if frame is larger than 5, if yes
+             we'll simply set it back to Zero.
+            */
+            if(nebulae[i].frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
+            {
+              nebulae[i].frame = 0;
+            }
+          }
+       }
      
-      // Update Nebula Running time
-      nebulae[0].runningTime += dT;
-      if(nebulae[0].runningTime>=nebulae[0].updateTime)
+      for(int i=0; i<sizeOfNebulae; i++)
       {
-        nebulae[0].runningTime = 0.0;
-        
-        // Update animation frame 
-        nebulae[0].rec.x = nebulae[0].frame * nebulae[0].rec.width;
-        nebulae[0].frame++;
-        
-         
-         /* 
-            We need to reset the frame as soon as it gets larger than five, 
-            since we have only frames 0 through five on the sprite sheet so 
-            we can place an if check to see if frame is larger than 5, if yes
-            we'll simply set it back to Zero.
-          */
-
-        if(nebulae[0].frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
-        {
-          nebulae[0].frame = 0;
-        }
-      }
-
-       // Update Nebula 2 Running time
-      
-      nebulae[1].runningTime += dT;
-      if(nebulae[1].runningTime>=nebulae[1].updateTime)
-      {
-        nebulae[1].runningTime = 0.0;
-        
-        // Update animation frame
-       nebulae[1].rec.x = nebulae[1].frame * nebulae[1].rec.width;
-       nebulae[1].frame++;
-        
-        /* 
-            We need to reset the frame as soon as it gets larger than five, 
-            since we have only frames 0 through five on the sprite sheet so 
-            we can place an if check to see if frame is larger than 5, if yes
-            we'll simply set it back to Zero.
-          */
-
-        if(nebulae[1].frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
-        {
-          nebulae[1].frame = 0;
-        }
+       // Draw multiple Nebulas here
+      DrawTextureRec(nebula,nebulae[i].rec, nebulae[i].pos, WHITE);
       }
       
-      // Draw Nebula
-      DrawTextureRec(nebula,nebulae[0].rec, nebulae[0].pos, WHITE);
-
-      // Draw the Second Nebula
-      DrawTextureRec(nebula,nebulae[1].rec,nebulae[1].pos, RED);
-    
       // Draw Scarfy
       DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
       
