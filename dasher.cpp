@@ -1,55 +1,23 @@
 /*
-   For Loops
-     Three main stages of the for loop.
-     I) Initialization:
-          int i = 0; i means index
-          [0] => Loop Variable
-          First is initializtion of the loop varaible.
+  Looping Through the Hazards
+  
+  Eg:
 
-    II) Condition:
-         i < 5 (Boolean Expression)
-         We use to determine whether or not the loop should coninue to
-         execute.
-    
-    III) Update:
-         i++ => statement
-        Finally we create a statement that will get run each time the loop finishes.  
-
-
-         HOW IT WORKS
-    
-    First the initialization happens
-            int i = 0;
-                ||
-                VV   // It should be a single arrow just put the double one for adjustment
-    Check the loop condition for the first time
-         =>    i < 5 => If the condition reaches 5<5 then it reaches (FALSE) ==> EXIT
-         ^       || True
-         |       VV 
-        i++ <-[Statement] (Body)
-
-    For example we have 
-    double damage[5]{
-      20.0,
-      35.5,
-      15.0,
-      5.75,
-      6.0
-    };
-  Right now we have 5 elements and let me say we want a loop that will
-  execute five times.
-
-  This is our for loop
-
-  for (int i=0; i<5; i++) 
-  {
-    double dmg = damage[i]; // damage[i]
-  }
-
-  -> We initialise i with 0
-  -> i<5 is the condition
-  -> Increment or update by using i++ i.e by 1
-  -> double dmg = damage[i]; we are going to use the index to access an element in the array called damage
+  for (int i=0; i<3; i++)
+   {
+      nebulae[i].rec.x = 0.0;
+      nebulae[i].rec.y = 0.0;
+      nebulae[i].rec.width = nebula.width/8;
+      nebulae[i].rec.height = nebula.height/8;
+      nebulae[i].pos.y = windowDimensions[1] - nebula.height/8;
+      nebulae[i].frame = 0;
+      nebulae[i].runningTime = 0.0;
+      nebulae[i].updateTime = 1.0/16.0;
+   } 
+   
+   nebulae[0].pos.x = windowDimensions[0];
+   nebulae[1].pos.x = windowDimensions[0] + 300;
+   nebulae[2].pos.x = windowDimensions[0] + 600;
 
 */    
 
@@ -83,30 +51,28 @@ int main()
    // Create a Nebula
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
 
-   // AnimData for Nebula 
-   AnimData nebData{ 
-    {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec -> Stored together in one
-    {windowDimensions[0], windowDimensions[1]-nebula.height/8}, // Vector2 pos  -> Stored togetherin one
-    0,  // int frame
-    1.0/12.0, // float updateTime
-    0 // float runningTime
-  };
-    
-    // AnimData for Nebula 2
-    AnimData neb2Data{ 
-    {0.0, 0.0, nebula.width/8, nebula.height/8},  // Rectangle rec
-    {windowDimensions[0] + 300, windowDimensions[1]-nebula.height/8}, // Vector2 pos
-    0,  // int frame
-    1.0/16.0, // float updateTime
-    0.0 // float runningTime
-  };
-  
-  // Creates an array size two that stores two anim data elements.
-  // We use the braced initialisation.
-  // Over here nebData will have index 0 and copies into the first element of the array.
-  // and neb2Data will have index 1 and copies that into the second element.
-   AnimData nebulae[2]{nebData, neb2Data}; 
+   // Creates an array size two that stores two anim data elements.
+   // We use the braced initialisation.
+   // Over here nebData will have index 0 and copies into the first element of the array.
+   // and neb2Data will have index 1 and copies that into the second element.
+   AnimData nebulae[3]{};
+
+   for (int i=0; i<3; i++)
+   {
+      nebulae[i].rec.x = 0.0;
+      nebulae[i].rec.y = 0.0;
+      nebulae[i].rec.width = nebula.width/8;
+      nebulae[i].rec.height = nebula.height/8;
+      nebulae[i].pos.y = windowDimensions[1] - nebula.height/8;
+      nebulae[i].frame = 0;
+      nebulae[i].runningTime = 0.0;
+      nebulae[i].updateTime = 1.0/16.0;
+   } 
    
+   nebulae[0].pos.x = windowDimensions[0];
+   nebulae[1].pos.x = windowDimensions[0] + 300;
+   nebulae[2].pos.x = windowDimensions[0] + 600;
+
   int nebVel{-200}; // Nebula Velocity
    
     // Compound datatype which has it's own variables, we use the dot . operator to access compund datatype
