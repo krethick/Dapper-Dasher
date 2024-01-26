@@ -1,16 +1,56 @@
 /*
-   Array of AnimData nubula hazards
-    
-    AnimData nebulae[2]; // Creates an array size two that stores two anim data elements.
-    nebulae[0].frame = 0; // One way to do it
+   For Loops
+     Three main stages of the for loop.
+     I) Initialization:
+          int i = 0; i means index
+          [0] => Loop Variable
+          First is initializtion of the loop varaible.
 
-    -> To be efficient go to the Edit and click Replace
-    -> After that search for the word
-    -> In the second box type the word you want to replace with.
-    -> Click replace to replace one by one
-    -> Click replace all to replace everything at a strech.
-    -> Up arrow to go up and down arrow to go down.
-     
+    II) Condition:
+         i < 5 (Boolean Expression)
+         We use to determine whether or not the loop should coninue to
+         execute.
+    
+    III) Update:
+         i++ => statement
+        Finally we create a statement that will get run each time the loop finishes.  
+
+
+         HOW IT WORKS
+    
+    First the initialization happens
+            int i = 0;
+                ||
+                VV   // It should be a single arrow just put the double one for adjustment
+    Check the loop condition for the first time
+         =>    i < 5 => If the condition reaches 5<5 then it reaches (FALSE) ==> EXIT
+         ^       || True
+         |       VV 
+        i++ <-[Statement] (Body)
+
+    For example we have 
+    double damage[5]{
+      20.0,
+      35.5,
+      15.0,
+      5.75,
+      6.0
+    };
+  Right now we have 5 elements and let me say we want a loop that will
+  execute five times.
+
+  This is our for loop
+
+  for (int i=0; i<5; i++) 
+  {
+    double dmg = damage[i]; // damage[i]
+  }
+
+  -> We initialise i with 0
+  -> i<5 is the condition
+  -> Increment or update by using i++ i.e by 1
+  -> double dmg = damage[i]; we are going to use the index to access an element in the array called damage
+
 */    
 
 #include "raylib.h"
