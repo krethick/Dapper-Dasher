@@ -1,16 +1,94 @@
 /*
-  Lots of Nebulae
-    
-   We can do this way manually
+ Functions
+   To Declare Functions we need:
+      *  Return Type
+      *  Function Name
+      *  Input Parameters
+      *  Function body 
+      *  Return Statements 
+ Example:
+   
+   int addInts(int a, int b)
+   {
+     return a + b;
+   }
 
-   nebulae[0].pos.x = windowDimensions[0];
-   nebulae[1].pos.x = windowDimensions[0] + 300;
-   nebulae[2].pos.x = windowDimensions[0] + 600;
-   nebulae[3].pos.x = windowDimensions[0] + 900;
-   nebulae[4].pos.x = windowDimensions[0] + 1200;
-   nebulae[5].pos.x = windowDimensions[0] + 1500;
+   int result = addInts(2,3);
 
-nebulae[i].pos.x = windowDimensions[0] + i * 300; // This a another way in the loop
+   addInts => Function Name
+  (int a, int b) => Input Parameters
+   
+   {             =>
+     return a+b; =>   Function Body
+   }             =>
+
+   return => It is the return Statement 
+
+   int result = addInts(2,3);
+    => The two gets copied to int a
+    => The three gets copied to int b
+    => The final result will a + b; i.e 2+3 = 5
+
+  Another Example:
+  
+    int addInts(int a, int b)
+   {
+     return a + b;
+   }
+   
+   int two{2};  // Using curly braces to initialize a variable also prevents narrowing
+   int three{3};
+   int result = addInts(two,three);
+    Output will be 5;
+
+  What is narrowing ?
+   =>  Narrowing, or more precisely narrowing conversion, is the implicit conversion 
+       of arithmetic values that includes​ a loss of accuracy.
+
+ Note : A function that has no return values is called a void function
+        and the return type is void.
+  
+  Void Function :
+     * void for no return type
+     * Does not need the return keyword
+  
+  Eg:
+    1) void sayHi() 
+       {
+       printf("Hi!");
+       }
+
+    2) void makeTwo(int a) 1
+       { 
+         a = 2;
+       }
+
+       int three{3};
+       makeTwo(three);   
+
+         [a]  [three]
+          2     3
+
+      * Now this function seems to change the input parameter, but the
+        truth is input parameter to functions are local to the function.
+      
+      * Inside the function the input parameter called A takes three as copy,
+        so A starts off with a value of three in the function body, but quickly
+        becomes two as we use the assignment operator to assign a value of two.
+
+      * After 1 line the end of the function body is reached and the function has
+        finished. 
+
+      * But after the function has finished, the integer called three still remains
+        unchanged and that's because three is passed in to make two and the input 
+        parameter A gets the value of three as a copy
+
+      * So functions do not alter the values of variables outside the function.
+      
+      * They simple take those values in as copied and perform any actions specified
+        inside the function body.
+      
+     
 
 */    
 
