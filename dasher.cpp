@@ -1,21 +1,6 @@
 /*
- Scrolling Background
-
-  Code planning :
-       Keeping one image on the left and a duplicate image on the right
-  
-  void DrawTextureEx(
-     Texture2D texture;
-     Vector2 position;
-     float rotation;
-     float scale;
-     Color tint;
-  );
-
-  * Draw a texture
-  * Takes extra parameters
-  * Useful for scailing an image
-    
+  Duplicating the Background
+         
 */    
 
 #include "raylib.h"
@@ -137,11 +122,17 @@ int main()
       BeginDrawing();
       ClearBackground(WHITE);
 
-      bgX -= 20 * dT; // Image move towards the left (like a care moving in reverse)
+      bgX -= 20 * dT; // Image move towards the left and scrolled at 20 pixles/sec (like a care moving in reverse)
+      if (bgX <= -background.width*2)
+      {
+         bgX = 0.0;
+      }
 
       // Draw the background
-      Vector2 bgPos{bgX, 0.0};
-      DrawTextureEx(background, bgPos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+      Vector2 bg1Pos{bgX, 0.0};
+      DrawTextureEx(background, bg1Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+      Vector2 bg2Pos{bgX + background.width * 2, 0.0}; // For duplication we use (bgX + background.width * 2) background.width * 2 because we are matching up with scale 2.
+      DrawTextureEx(background, bg2Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
       
       // Perform ground check
       if (isOnGround(scarfyData,windowDimensions[1]))
