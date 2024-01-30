@@ -1,5 +1,14 @@
 /*
-  Duplicating the Background
+  Drawing Mindground and Foreground
+
+  What is a background ?
+  =>  The furthest element away from you is the background
+
+  What is a midground ?
+  =>  The middle ground makes up the area in between.
+
+  What is a foreground ?
+  => The element of the photo closest to you makes up the foreground.
          
 */    
 
@@ -107,6 +116,12 @@ int main()
       // Load the background texture
     Texture2D background = LoadTexture("textures/far-buildings.png");
     float bgX{}; // Automaticlly initialises the value to 0.
+    
+    Texture2D midground = LoadTexture("textures/back-buildings.png");
+    float mgX{}; // Automaticlly initialises the value to 0.
+
+    Texture2D foreground = LoadTexture("textures/foreground.png");
+    float fgX{}; // Automaticlly initialises the value to 0.
 
     SetTargetFPS(60);
     
@@ -123,9 +138,21 @@ int main()
       ClearBackground(WHITE);
 
       bgX -= 20 * dT; // Image move towards the left and scrolled at 20 pixles/sec (like a care moving in reverse)
+      mgX -= 40 * dT;
+      fgX -= 80 * dT;
       if (bgX <= -background.width*2)
       {
          bgX = 0.0;
+      }
+      
+      if(mgX <= -midground.width*2)
+      {
+         mgX = 0.0;
+      }
+
+      if(fgX <= -foreground.width*2)
+      {
+         fgX = 0.0;
       }
 
       // Draw the background
@@ -133,6 +160,19 @@ int main()
       DrawTextureEx(background, bg1Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
       Vector2 bg2Pos{bgX + background.width * 2, 0.0}; // For duplication we use (bgX + background.width * 2) background.width * 2 because we are matching up with scale 2.
       DrawTextureEx(background, bg2Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+      
+      // Draw the midground
+      Vector2 mg1Pos{mgX, 0.0};
+      DrawTextureEx(midground, mg1Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+      Vector2 mg2Pos{mgX + midground.width * 2, 0.0}; // For duplication we use (mgX  + midground.width * 2) midground.width * 2 because we are matching up with scale 2.
+      DrawTextureEx(midground, mg2Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+
+      // Draw the foreground
+      Vector2 fg1Pos{fgX, 0.0};
+      DrawTextureEx(foreground, fg1Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+      Vector2 fg2Pos{fgX + foreground.width * 2, 0.0}; // For duplication we use (mgX  + foreground.width * 2) foreground.width * 2 because we are matching up with scale 2.
+      DrawTextureEx(foreground, fg2Pos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
+
       
       // Perform ground check
       if (isOnGround(scarfyData,windowDimensions[1]))
@@ -203,5 +243,7 @@ int main()
     */
    UnloadTexture(nebula);
    UnloadTexture(background); // Unload texture background
+   UnloadTexture(midground); // Unload texture midground
+   UnloadTexture(foreground); // Unload texture foreground
    CloseWindow();
 }
