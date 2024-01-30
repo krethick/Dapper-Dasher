@@ -1,36 +1,8 @@
 /*
- Refactoring:
-    When we take some of our code in our program and put it in a function and call that function instead. We call this refactoring
-
-    void updateAnimData(AnimData data)
-    {
-       data.pos.x = 2;
-       return data;
-    }
-
-    updateAnimData(scarfyData);
-
-    => We know this would not work because data are input parameter is a copy of whatever we pass in.
-      AnimData data (data is a copy)
+ Update Animation Data:
+    * Refactor the code for updating animation data
+    * Reuse for both scarfy and the nebulae 
     
-    => So say we call update AnimData with scarfyData. ScarfyData will remain unchanged, so its paused x will 
-      not be set equal to 2 since it's passed in as a copy.
-
-  WHAT WE CAN DO ?
-     We can make a function that has a return type of AnimData instead of void.
-
-     AnimData updateAnimData(AnimData data)
-     {
-       data.pos.x = 2;
-       return data;
-     }
-
-     // So instead we can take ScarfyData, pass it in to Update Anim data, and the use the assignment operator 
-       to take the return value from update anim data and assign that to our scarfy data variable overwritting all of its members.
-       Since we are using the assignment operator on Scarfy Data, Scarfy data is in fact changed.
-     
-     scarfyData = updateAnimData(scarfyData);
-
 */    
 
 #include "raylib.h"
@@ -48,6 +20,27 @@ bool isOnGround(AnimData data, int windowHeight)
 {
    return data.pos.y >= windowHeight - data.rec.height;
 }
+
+// Function to update running time of scarfy and nebulae
+AnimData updateAnimData(AnimData data, float deltaTime, int maxFrame)
+{
+    // Update Running Time 
+    data.runningTime += deltaTime;
+    if (data.runningTime >= data.updateTime)
+    {
+      data.runningTime = 0.0;
+      // update animation frame
+      data.rec.x = data.frame * data.rec.width;
+      data.frame++;
+      if (data.frame > maxFrame)
+      {
+          data.frame = 0;
+      } 
+    }
+    return data;
+}
+
+
 
 int main()
 {
@@ -160,53 +153,15 @@ int main()
       
       if(!isInAir) // !isInAir = Not in Air i.e !True = false 
       {
-      // Update Running time
-      scarfyData.runningTime += dT;
-      if(scarfyData.runningTime>=scarfyData.updateTime) // We can even put this (isInAir==false) if we want.
-      {
-            scarfyData.runningTime = 0.0;
-            
-            // Update animation frame
-            scarfyData.rec.x = scarfyData.frame * scarfyData.rec.width;
-            scarfyData.frame++; // Next time the frame will be increasing by 1
-            
-            /* 
-            We need to reset the frame as soon as it gets larger than five, 
-            since we have only frames 0 through five on the sprite sheet so 
-            we can place an if check to see if frame is larger than 5, if yes
-            we'll simply set it back to Zero.
-          */
-            if(scarfyData.frame>5) 
-            {
-              scarfyData.frame = 0;
-            }
-          }
+         scarfyData = updateAnimData(scarfyData, dT, 5);
       }
       
       // Create a for loop for creating Nebulaes
 
       for (int i=0; i<sizeOfNebulae; i++)
       {
-          // Update Nebula Running time
-         nebulae[i].runningTime += dT;
-         if(nebulae[i].runningTime>=nebulae[i].updateTime)
-         {
-            nebulae[i].runningTime = 0.0;
-            // Update animation frame 
-            nebulae[i].rec.x = nebulae[i].frame * nebulae[i].rec.width;
-            nebulae[i].frame++;
-            /* 
-             We need to reset the frame as soon as it gets larger than five, 
-             since we have only frames 0 through five on the sprite sheet so 
-             we can place an if check to see if frame is larger than 5, if yes
-             we'll simply set it back to Zero.
-            */
-            if(nebulae[i].frame > 7) //  Position starts from 0 so we end up in 7, so eight is like in index 7.
-            {
-              nebulae[i].frame = 0;
-            }
-          }
-       }
+         nebulae[i] = updateAnimData(nebulae[i], dT, 7);
+      }
      
       for(int i=0; i<sizeOfNebulae; i++)
       {
