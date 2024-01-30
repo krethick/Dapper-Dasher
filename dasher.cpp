@@ -1,7 +1,20 @@
 /*
- Update Animation Data:
-    * Refactor the code for updating animation data
-    * Reuse for both scarfy and the nebulae 
+ Scrolling Background
+
+  Code planning :
+       Keeping one image on the left and a duplicate image on the right
+  
+  void DrawTextureEx(
+     Texture2D texture;
+     Vector2 position;
+     float rotation;
+     float scale;
+     Color tint;
+  );
+
+  * Draw a texture
+  * Takes extra parameters
+  * Useful for scailing an image
     
 */    
 
@@ -104,6 +117,11 @@ int main()
     
      // Jump Velocity (pixles/second)
     const int jumpVel{-600};
+    
+
+      // Load the background texture
+    Texture2D background = LoadTexture("textures/far-buildings.png");
+    float bgX{}; // Automaticlly initialises the value to 0.
 
     SetTargetFPS(60);
     
@@ -118,6 +136,12 @@ int main()
       // Start Drawing
       BeginDrawing();
       ClearBackground(WHITE);
+
+      bgX -= 20 * dT; // Image move towards the left (like a care moving in reverse)
+
+      // Draw the background
+      Vector2 bgPos{bgX, 0.0};
+      DrawTextureEx(background, bgPos, 0.0, 2.0, WHITE); // rotation is the 3rd one and the 4th one is the scale.
       
       // Perform ground check
       if (isOnGround(scarfyData,windowDimensions[1]))
@@ -172,6 +196,9 @@ int main()
       // Draw Scarfy
       DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
       
+      // Draw Background
+      
+      
       // Finish/Stop Drawing
       EndDrawing();
     }
@@ -184,5 +211,6 @@ int main()
       the program terminates.
     */
    UnloadTexture(nebula);
+   UnloadTexture(background); // Unload texture background
    CloseWindow();
 }
