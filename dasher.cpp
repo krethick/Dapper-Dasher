@@ -1,5 +1,6 @@
 /*
  Functions
+ A function is a block of code that performs some operation
    To Declare Functions we need:
       *  Return Type
       *  Function Name
