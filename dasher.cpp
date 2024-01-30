@@ -1,15 +1,6 @@
 /*
-  Drawing Mindground and Foreground
-
-  What is a background ?
-  =>  The furthest element away from you is the background
-
-  What is a midground ?
-  =>  The middle ground makes up the area in between.
-
-  What is a foreground ?
-  => The element of the photo closest to you makes up the foreground.
-         
+  Finish Line:
+       It can simple be a variable that will set and update each frame of the game.     
 */    
 
 #include "raylib.h"
@@ -87,7 +78,9 @@ int main()
       nebulae[i].runningTime = 0.0;
       nebulae[i].updateTime = 1.0/16.0;
       nebulae[i].pos.x = windowDimensions[0] + i * 300; // This a another way in the loop
-   } 
+   }  
+
+   float finishLine { nebulae[sizeOfNebulae - 1].pos.x}; // Created and Initialised the Finish Line
 
   int nebVel{-200}; // Nebula Velocity
    
@@ -218,6 +211,9 @@ int main()
          nebulae[i] = updateAnimData(nebulae[i], dT, 7);
       }
      
+     // Update Finish line
+     finishLine += nebVel * dT;
+
       for(int i=0; i<sizeOfNebulae; i++)
       {
        // Draw multiple Nebulas here
