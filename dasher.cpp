@@ -1,22 +1,5 @@
 /*
-  Collision Detection:
-
-      bool CheckCollisionRecs(Rectangle rec1, Recatangle rec2);
-
-      How can we check to see if scarf is colliding with any of our nebula hazards ?
-      => Each frame we can loop through each hazard in the nebula array, and we can do this using something 
-         called a range based for loop.
-
-      This is a ranged based for loop
-
-      for (AnimData nebula : nebulae) // For each element in the nebulae array, we are creating a temporary variable called nebula, and the loop body is executed for each element in the array 
-      {
-        // Check for collison
-        if(CheckCollision(nebulaRec, scarfyRec))
-        {
-          collision = true;
-        } 
-      }
+  Winning and Losing
 */    
 
 #include "raylib.h"
@@ -76,7 +59,7 @@ int main()
    // Create a Nebula
    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
    
-   const int sizeOfNebulae{10}; // Create the size of nebulaes
+   const int sizeOfNebulae{3}; // Create the size of nebulaes
    // Creates an array size two that stores two anim data elements.
    // We use the braced initialisation.
    // Over here nebData will have index 0 and copies into the first element of the array.
@@ -257,8 +240,14 @@ int main()
          if(collision)
          {
            // Lose the game
+           DrawText("GAME OVER", windowDimensions[0]/4, windowDimensions[1]/2, 40, RED);
          }
-         else
+         else if(scarfyData.pos.x>=finishLine)
+         {
+           // Win the Game
+           DrawText("YOU WIN", windowDimensions[0]/4, windowDimensions[1]/2, 40, GREEN);
+         }
+          else
          {
             for(int i=0; i<sizeOfNebulae; i++)
             {
@@ -268,9 +257,10 @@ int main()
             // Draw Scarfy
             DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
          }
+
+        
       
-     
-     // Update Finish line
+    // Update Finish line
      finishLine += nebVel * dT;
 
       
