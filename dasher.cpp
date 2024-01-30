@@ -1,5 +1,48 @@
 /*
   Winning and Losing
+
+  For each loop explanation:
+   
+   #include<iostream>
+    using namespace std; 
+    int main() 
+    { 
+    int arr[]={1,2,3,4,5};   //array initialization
+    cout<<"The elements are: ";
+    for(int i : arr)
+    {
+    	cout<<i<<" ";
+    }
+    return 0;
+}
+
+The elements are: 1 2 3 4 5
+
+EXPLANATION:
+ * An array arr[] is initialized with some values {1 , 2 , 3 , 4 , 5}
+ * Inside the loop structure, ‘i’ is the variable that stores the value of the current array element
+ * arr is the array name which also serves as the base address of the respective array
+ * As we can see, printing ‘i’ for each iteration gives us the corresponding array elements in
+   contrast to the array indices in case of normal for loop
+
+   NOTE: While declaring the variable ‘i’ we could also use the auto datatype instead of int. 
+        This ensures that the type of the variable is deduced from the array type, 
+        and no data type conflicts occur.
+
+  #include<iostream>
+  using namespace std; 
+  int main() 
+  { 
+    int array[]={1,4,7,4,8,4};
+    cout<<"The elements are: ";
+    for(auto var : array)
+    {
+    	cout<<var<<" ";
+    }
+    return 0;
+  }
+
+
 */    
 
 #include "raylib.h"
@@ -213,7 +256,7 @@ int main()
       }
 
       // For collision
-      for(AnimData nebula : nebulae)
+      for(AnimData nebula : nebulae) // For each loop here AnimData nebula holds each element of the nebulae array
       {
         float pad{50}; // We use this because to reduce the sprite size so collision take place when the object hits not the object boundaries
          
