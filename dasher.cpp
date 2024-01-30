@@ -88,7 +88,78 @@
       * They simple take those values in as copied and perform any actions specified
         inside the function body.
       
+      void makeTwo(int a)
+      {
+       a = 2;
+      }
+ 
+     int main() 
+     {
+     int three {3};
+     makeTwo(three);
+     }
+
      
+    * The function makeTwo is also declared, which takes an integer a as a parameter and sets its value to 2. 
+      However, note that the change made to a inside this function won't affect the original variable that 
+      is passed to it.
+
+   * The reason the change made to a inside the makeTwo function won't affect the original variable is because the parameter a is passed by value. 
+     When you pass a variable by value to a function in C++, a copy of that variable is made, and the 
+     function works with the copy rather than the original.
+
+   * In this function, the parameter a is a local variable within the function. When you pass a value to this function, 
+     it creates a copy of that value and assigns it to a. The change made to a inside the function has no effect 
+     on the original variable passed as an argument.
+   
+  * If you want the function to modify the original variable, you would need to pass it by reference.
+
+   Call by value c++
+
+   #include <iostream>  
+   using namespace std;  
+   void change(int data);  
+   int main()  
+   {  
+     int data = 3;  
+     change(data);  
+     cout << "Value of the data is: " << data<< endl;  
+    return 0;  
+   }
+
+   void change(int data)  
+   {  
+     data = 5;  
+   }
+
+ Value of the data is: 3
+
+Call by reference c++
+
+   #include <iostream>  
+   using namespace std;  
+   void change(int &data);  
+   int main()  
+   {  
+     int data = 3;  
+     change(data);  
+     cout << "Value of the data is: " << data<< endl;  
+    return 0;  
+   }
+
+   void change(int &data)  
+   {  
+     data = 5;  
+   }
+
+ Value of the data is: 5
+
+ Difference between call by value and reference
+            
+            call by value                                                                                  call by reference
+ 	A copy of value is passed to the function                                                    An address of value is passed to the function
+  Changes made inside the function is not reflected on other functions                  Changes made inside the function is reflected outside the function also
+  Actual and formal arguments will be created in different memory location               Actual and formal arguments will be created in same memory location
 
 */    
 
