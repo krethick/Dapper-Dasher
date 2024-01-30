@@ -1,6 +1,22 @@
 /*
-  Finish Line:
-       It can simple be a variable that will set and update each frame of the game.     
+  Collision Detection:
+
+      bool CheckCollisionRecs(Rectangle rec1, Recatangle rec2);
+
+      How can we check to see if scarf is colliding with any of our nebula hazards ?
+      => Each frame we can loop through each hazard in the nebula array, and we can do this using something 
+         called a range based for loop.
+
+      This is a ranged based for loop
+
+      for (AnimData nebula : nebulae) // For each element in the nebulae array, we are creating a temporary variable called nebula, and the loop body is executed for each element in the array 
+      {
+        // Check for collison
+        if(CheckCollision(nebulaRec, scarfyRec))
+        {
+          collision = true;
+        } 
+      }
 */    
 
 #include "raylib.h"
@@ -116,6 +132,8 @@ int main()
     Texture2D foreground = LoadTexture("textures/foreground.png");
     float fgX{}; // Automaticlly initialises the value to 0.
 
+    bool collision{}; // By blank meaning we have initialised it to false
+
     SetTargetFPS(60);
     
     // Keeping the WindowShouldClose as false.
@@ -210,18 +228,52 @@ int main()
       {
          nebulae[i] = updateAnimData(nebulae[i], dT, 7);
       }
+
+      // For collision
+      for(AnimData nebula : nebulae)
+      {
+        float pad{50}; // We use this because to reduce the sprite size so collision take place when the object hits not the object boundaries
+         
+         Rectangle nebRec{
+          nebula.pos.x + pad,
+          nebula.pos.y + pad,
+          nebula.rec.width - 2 * pad,  // Reduce the sprite boundary size
+          nebula.rec.height - 2 * pad
+         };
+
+         Rectangle scarfyRec {
+          scarfyData.pos.x,
+          scarfyData.pos.y,
+          scarfyData.rec.width,
+          scarfyData.rec.height
+         };
+
+         if(CheckCollisionRecs(nebRec, scarfyRec))
+         {
+           collision = true;
+         }
+      }
+
+         if(collision)
+         {
+           // Lose the game
+         }
+         else
+         {
+            for(int i=0; i<sizeOfNebulae; i++)
+            {
+            // Draw multiple Nebulas here
+             DrawTextureRec(nebula, nebulae[i].rec, nebulae[i].pos, WHITE);
+            }
+            // Draw Scarfy
+            DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
+         }
+      
      
      // Update Finish line
      finishLine += nebVel * dT;
 
-      for(int i=0; i<sizeOfNebulae; i++)
-      {
-       // Draw multiple Nebulas here
-      DrawTextureRec(nebula,nebulae[i].rec, nebulae[i].pos, WHITE);
-      }
       
-      // Draw Scarfy
-      DrawTextureRec(scarfy, scarfyData.rec, scarfyData.pos, WHITE);
       
       // Draw Background
       
