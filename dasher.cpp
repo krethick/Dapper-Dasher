@@ -1,166 +1,35 @@
 /*
- Functions
- A function is a block of code that performs some operation
-   To Declare Functions we need:
-      *  Return Type
-      *  Function Name
-      *  Input Parameters
-      *  Function body 
-      *  Return Statements 
- Example:
-   
-   int addInts(int a, int b)
-   {
-     return a + b;
-   }
+ Refactoring:
+    When we take some of our code in our program and put it in a function and call that function instead. We call this refactoring
 
-   int result = addInts(2,3);
+    void updateAnimData(AnimData data)
+    {
+       data.pos.x = 2;
+       return data;
+    }
 
-   addInts => Function Name
-  (int a, int b) => Input Parameters
-   
-   {             =>
-     return a+b; =>   Function Body
-   }             =>
+    updateAnimData(scarfyData);
 
-   return => It is the return Statement 
+    => We know this would not work because data are input parameter is a copy of whatever we pass in.
+      AnimData data (data is a copy)
+    
+    => So say we call update AnimData with scarfyData. ScarfyData will remain unchanged, so its paused x will 
+      not be set equal to 2 since it's passed in as a copy.
 
-   int result = addInts(2,3);
-    => The two gets copied to int a
-    => The three gets copied to int b
-    => The final result will a + b; i.e 2+3 = 5
+  WHAT WE CAN DO ?
+     We can make a function that has a return type of AnimData instead of void.
 
-  Another Example:
-  
-    int addInts(int a, int b)
-   {
-     return a + b;
-   }
-   
-   int two{2};  // Using curly braces to initialize a variable also prevents narrowing
-   int three{3};
-   int result = addInts(two,three);
-    Output will be 5;
-
-  What is narrowing ?
-   =>  Narrowing, or more precisely narrowing conversion, is the implicit conversion 
-       of arithmetic values that includes​ a loss of accuracy.
-
- Note : A function that has no return values is called a void function
-        and the return type is void.
-  
-  Void Function :
-     * void for no return type
-     * Does not need the return keyword
-  
-  Eg:
-    1) void sayHi() 
-       {
-       printf("Hi!");
-       }
-
-    2) void makeTwo(int a) 1
-       { 
-         a = 2;
-       }
-
-       int three{3};
-       makeTwo(three);   
-
-         [a]  [three]
-          2     3
-
-      * Now this function seems to change the input parameter, but the
-        truth is input parameter to functions are local to the function.
-      
-      * Inside the function the input parameter called A takes three as copy,
-        so A starts off with a value of three in the function body, but quickly
-        becomes two as we use the assignment operator to assign a value of two.
-
-      * After 1 line the end of the function body is reached and the function has
-        finished. 
-
-      * But after the function has finished, the integer called three still remains
-        unchanged and that's because three is passed in to make two and the input 
-        parameter A gets the value of three as a copy
-
-      * So functions do not alter the values of variables outside the function.
-      
-      * They simple take those values in as copied and perform any actions specified
-        inside the function body.
-      
-      void makeTwo(int a)
-      {
-       a = 2;
-      }
- 
-     int main() 
+     AnimData updateAnimData(AnimData data)
      {
-     int three {3};
-     makeTwo(three);
+       data.pos.x = 2;
+       return data;
      }
 
+     // So instead we can take ScarfyData, pass it in to Update Anim data, and the use the assignment operator 
+       to take the return value from update anim data and assign that to our scarfy data variable overwritting all of its members.
+       Since we are using the assignment operator on Scarfy Data, Scarfy data is in fact changed.
      
-    * The function makeTwo is also declared, which takes an integer a as a parameter and sets its value to 2. 
-      However, note that the change made to a inside this function won't affect the original variable that 
-      is passed to it.
-
-   * The reason the change made to a inside the makeTwo function won't affect the original variable is because the parameter a is passed by value. 
-     When you pass a variable by value to a function in C++, a copy of that variable is made, and the 
-     function works with the copy rather than the original.
-
-   * In this function, the parameter a is a local variable within the function. When you pass a value to this function, 
-     it creates a copy of that value and assigns it to a. The change made to a inside the function has no effect 
-     on the original variable passed as an argument.
-   
-  * If you want the function to modify the original variable, you would need to pass it by reference.
-
-   Call by value c++
-
-   #include <iostream>  
-   using namespace std;  
-   void change(int data);  
-   int main()  
-   {  
-     int data = 3;  
-     change(data);  
-     cout << "Value of the data is: " << data<< endl;  
-    return 0;  
-   }
-
-   void change(int data)  
-   {  
-     data = 5;  
-   }
-
- Value of the data is: 3
-
-Call by reference c++
-
-   #include <iostream>  
-   using namespace std;  
-   void change(int &data);  
-   int main()  
-   {  
-     int data = 3;  
-     change(data);  
-     cout << "Value of the data is: " << data<< endl;  
-    return 0;  
-   }
-
-   void change(int &data)  
-   {  
-     data = 5;  
-   }
-
- Value of the data is: 5
-
- Difference between call by value and reference
-            
-            call by value                                                                                  call by reference
- 	A copy of value is passed to the function                                                    An address of value is passed to the function
-  Changes made inside the function is not reflected on other functions                  Changes made inside the function is reflected outside the function also
-  Actual and formal arguments will be created in different memory location               Actual and formal arguments will be created in same memory location
+     scarfyData = updateAnimData(scarfyData);
 
 */    
 
@@ -173,6 +42,12 @@ struct AnimData // Animation Data
   float updateTime;
   float runningTime;
 };
+
+// Function to check if scarfy is on the ground or on the air
+bool isOnGround(AnimData data, int windowHeight)
+{
+   return data.pos.y >= windowHeight - data.rec.height;
+}
 
 int main()
 {
@@ -252,7 +127,7 @@ int main()
       ClearBackground(WHITE);
       
       // Perform ground check
-      if (scarfyData.pos.y >= windowDimensions[1] - scarfyData.rec.height)
+      if (isOnGround(scarfyData,windowDimensions[1]))
       {
         // Scarfy on the ground
         velocity = 0;
